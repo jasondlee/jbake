@@ -57,6 +57,7 @@ allprojects {
     apply plugin: 'jacoco'
 
     repositories {
+        mavenLocal()
         jcenter()
     }
 
@@ -78,6 +79,7 @@ subprojects {
         apply from: "$rootDir/gradle/signing.gradle"
         // We do not publish any jars from the jbake-dist project
         if ( project.name != "jbake-dist" ) {
+            print ("Applying maven-publising")
             apply from: "$rootDir/gradle/maven-publishing.gradle"
         }
         // bintray setup
@@ -95,6 +97,7 @@ subprojects {
          */
         File file = file("${System.properties.getProperty("java.home")}/lib/rt.jar")
         if ( file.exists() ) {
+            print("Setting bootstrap classpath")
             options.setBootstrapClasspath(files(file))
         }
     }
