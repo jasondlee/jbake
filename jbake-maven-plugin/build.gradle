@@ -1,23 +1,24 @@
 import java.text.SimpleDateFormat
 
+buildscript {
+    dependencies {
+        classpath group: "com.liferay", name: "com.liferay.gradle.plugins.maven.plugin.builder", version: "1.2.0"
+    }
+
+    repositories {
+        maven {
+            url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+        }
+    }
+}
+
 apply plugin: 'java'
+apply plugin: "com.liferay.maven.plugin.builder"
 apply plugin: 'maven'
 
 description = "Maven Plugin for JBake"
 dependencies {
     compile project (":jbake-core")
-    /*
-    compile("org.jbake:jbake-core:2.6.0") {
-        exclude(module: "jetty-server")
-        exclude(module: "orient-commons")
-        exclude(module: "orientdb-core")
-    }
-    */
-    /*
-    compile "com.orientechnologies:orientdb-graphdb:2.2.15"
-    compile "org.freemarker:freemarker:2.3.22"
-    compile "org.asciidoctor:asciidoctorj:1.5.4.1"
-    */
     compile "org.eclipse.jetty:jetty-util:$jettyServerVersion"
     compile "org.eclipse.jetty:jetty-server:$jettyServerVersion", optional
     compile "org.apache.maven:maven-plugin-api:3.0"
@@ -29,6 +30,7 @@ dependencies {
 }
 
 Date buildTimeAndDate = new Date()
+
 ext {
     buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
     buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
@@ -120,11 +122,20 @@ artifacts {
 }
 
 install {
-    def pomFile = file("$buildDir/pom.xml")
     repositories.mavenInstaller {
         setPom jbakePom
-//        pom.groupId = project.group
-//        pom.version = project.version
-//        pom.artifactId = "jbake-maven-plugin"
     }
+}
+
+writeMavenSettings {
+    outputFile = 'src/main/resources/META-INF/maven/settings.xml'
+}
+buildPluginDescriptor {
+    goalPrefix = "jbake"
+    pomGroupId = 'org.jbake'
+    pomArtifactId = 'jbake-maven-plugin'
+    pomVersion = project.version
+    classesDir = 'build/classes/java/main'
+    mavenPluginPluginVersion = '3.5.2'
+//    mavenDebug = true
 }
