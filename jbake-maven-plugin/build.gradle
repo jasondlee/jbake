@@ -185,11 +185,6 @@ install {
     }
 }
 
-writeMavenSettings {
-//    outputFile = 'build/resources/main/META-INF/maven/settings.xml'
-//    outputFile = 'src/main/resources/META-INF/maven/settings.xml'
-}
-
 buildPluginDescriptor {
     goalPrefix = "jbake"
     pomGroupId = 'org.jbake'
