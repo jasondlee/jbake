@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.blazebit.jbake.mojo;
+package org.jbake.mavenplugin;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -21,9 +21,9 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
 
 /**
  * Builds and serves a JBake site locally.
@@ -48,7 +48,8 @@ public class ServeMojo extends WatchMojo {
     @Override
     public void execute() throws MojoExecutionException {
         final Server server = new Server();
-        SelectChannelConnector connector = new SelectChannelConnector();
+
+        ServerConnector connector = new ServerConnector(server);
         connector.setHost(listenAddress);
         connector.setPort(port);
         server.setConnectors(new Connector[]{ connector });

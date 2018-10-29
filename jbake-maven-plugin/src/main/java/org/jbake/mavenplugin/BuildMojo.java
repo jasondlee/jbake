@@ -28,6 +28,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.jbake.app.Oven;
 import org.jbake.app.configuration.ConfigUtil;
+import org.jbake.app.configuration.DefaultJBakeConfiguration;
+import org.jbake.app.configuration.JBakeConfiguration;
 
 import java.io.File;
 import java.util.Iterator;
@@ -127,7 +129,8 @@ public class BuildMojo extends AbstractMojo {
             config.addConfiguration(new MapConfiguration(properties));
         }
         config.addConfiguration(new MapConfiguration(project.getProperties()));
-//        config.addConfiguration(new ConfigUtil().loadConfig(inputDirectory));
+        DefaultJBakeConfiguration jBakeConfiguration = (DefaultJBakeConfiguration) new ConfigUtil().loadConfig(inputDirectory);
+        config.addConfiguration(jBakeConfiguration.getCompositeConfiguration());
         
         if (getLog().isDebugEnabled()) {
             getLog().debug("Configuration:");
